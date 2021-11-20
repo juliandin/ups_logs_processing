@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function() {
+            var dataPoints = [];
+
+            function getDataPointsFromCSV(csv) {
+                var dataPoints = csvLines = points = [];
+                csvLines = csv.split("\n");
+
+                for (var i = 0; i < csvLines.length; i++)
+                    if (csvLines[i].length > 0) {
+                        points = csvLines[i].split(",");
+                        dataPoints.push({
+                            x: new Date(parseFloat(points[0])),
+                            y: parseFloat(points[1]) / 1000
+                        });
+                    }
+                return dataPoints;
+            }
+
+            $.get("data.csv", function(data) {
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    title: {
+                        text: "Powerfails in 2 years",
+                    },
+                    axisX:{
+                        valueFormatString: "DD-MMM-YYYY HH:mm" ,
+                        labelAngle: -45
+                    },
+                    data: [{
+                        type: "line",
+                        dataPoints: getDataPointsFromCSV(data)
+                    }]
+                });
+
+                chart.render();
+
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="chartContainer" style="width:100%; height:500px;"></div>
+</body>
+</html>

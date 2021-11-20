@@ -1,0 +1,2 @@
+1. Run python script
+2. Open html page
